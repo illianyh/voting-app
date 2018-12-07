@@ -1,0 +1,305 @@
+<head>
+<!--importing css and jquery file-->
+<link href="css/style.css" rel="stylesheet">
+<script src="js/jquery.js"> </script>
+<script>
+var c=[0,0,0,0,0,0,0,0,0,0];
+function init(){
+$('#voteForm').fadeOut();
+$('#result').fadeOut();
+}
+window.onload=init;
+</script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+</head>
+
+<title>Login</title>
+<body>
+<div id="main">
+	<div class="login-page" >
+	  <h2 style="text-align: center;">Vote for Employee of the Month!</h2>
+
+	  <div class="form" id="loginForm" onload="init()">
+			<!--simple login form that takes user name and password to varify user before casting vote-->
+			<h3>Login</h3>
+		
+		  <input id="uname" type="text" placeholder="User name..."/>
+		  <input id="upass" type="password" placeholder="Password ..."/>
+		  <button onclick="login()">login</button><!--call onclick function to validate user -->
+		
+	  </div>
+
+		<div class="form" id="voteForm">
+			<!--Form to cast vote-->
+			
+				<h1>IT Engineers</h1>
+			  <select id="engineer">
+			</select>
+
+			<h1>Software Developer</h1>
+			  <select id="developer">
+			</select>
+
+			<h1>Application Support</h1>
+			  <select id="application">
+			</select>
+
+			  <button onclick='vote()'>Vote</button><!--call vote function to cast a vote-->
+			  </div>
+			 <div class="form" id="result">
+			<h1>Top Employees</h1>
+			<h3>IT Engineers:</h3>
+			<div id="eng">
+			</div>
+			<canvas id="enChart"></canvas>
+			<h3>Software Developer:</h3>
+			<div id="dev">
+			</div>
+			<canvas id="deChart"></canvas>
+			<h3>Application Support:</h3>
+			<div id="app">
+			
+			</div>
+			<canvas id="apChart"></canvas>
+			
+			
+			<br/>
+			 <a  onclick='logout()'class="btn btn-info btn-lg">
+          <span class="glyphicon glyphicon-log-out"></span> Log out
+        </a>			  
+		</div>
+		
+
+	</div>
+
+	<script type="text/javascript">
+		function logout(){
+			$('#loginForm').fadeIn();
+			$("#engineer").empty();
+			$("#developer").empty();
+			$("#application").empty();
+			$('#result').fadeOut();
+		
+		}
+		
+		var usernamee="";
+		var userpasss="";
+		var hasVoted=new Array(10);
+		//pre define users list to verify a user
+		var list = [
+				{  id: 1 ,pass: '1230', name: 'Oliver',cat:'IT Engineers'},
+				{  id: 2 ,pass: '1231', name: 'Jack',cat:'IT Engineers'},
+				{  id: 3 ,pass: '1232', name: 'Harry',cat:'IT Engineers' },
+				{  id: 4 ,pass: '1233', name: 'Charlie',cat:'Software Developer'},
+				{  id: 5 ,pass: '1234', name: 'Thomas',cat:'Software Developer'},
+				{  id: 6 ,pass: '1235', name: 'George',cat:'Software Developer'},
+				{  id: 7 ,pass: '1236', name: 'Oscar',cat:'Software Developer'},
+				{  id: 8 ,pass: '1237', name: 'James',cat:'Application Support'},
+				{  id: 9 ,pass: '1238', name: 'William',cat:'Application Support'},
+				{  id: 10 ,pass: '1239', name: 'John',cat:'Application Support'}
+						];
+		function vote(){
+		
+		hasVoted.push(usernamee);
+		var en="";
+		var eName=document.getElementById("engineer").selectedIndex;
+		for(var i=0;i<3;i++)
+			if(i==eName && usernamee!=list[i].name)
+			c[i]++;
+			var m=Math.max(c[0],c[1]);
+			m=Math.max(m,c[2]);
+			if(m==c[0])
+			en+=list[0].name+" , ";
+			if(m==c[1])
+			en+=list[1].name+" , ";
+			if(m==c[2])
+			en+=list[2].name+" , ";
+			document.getElementById("eng").innerHTML=en;
+				var ctx = document.getElementById('enChart').getContext('2d');
+			var chart = new Chart(ctx, {
+			// The type of chart we want to create
+				type: 'doughnut',
+
+			// The data for our dataset
+			data: {
+			labels: [list[0].name,list[1].name,list[2].name],
+			datasets: [{
+            label: "IT Engineers",
+            backgroundColor: ['red','green','blue'],
+            borderColor: 'rgb(255, 99, 132)',
+            data: [c[0],c[1],c[2]],
+        }]
+    },
+
+    // Configuration options go here
+    options: {}
+});
+		var de="";
+		var dName=document.getElementById("developer").selectedIndex;
+		for(var i=3;i<7;i++)
+		 if(i-3==dName && usernamee!=list[i].name)
+			c[i]++;
+			 m=Math.max(c[3],c[4]);
+			m=Math.max(m,c[5]);
+			m=Math.max(m,c[6]);
+			if(m==c[3])
+			de+=list[3].name+" , ";
+			if(m==c[4])
+			de+=list[4].name+" , ";
+			if(m==c[5])
+			de+=list[5].name+" , ";
+			if(m==c[6])
+			de+=list[6].name+" , ";
+			document.getElementById("dev").innerHTML=de;
+				
+				var ctx = document.getElementById('deChart').getContext('2d');
+			var chart = new Chart(ctx, {
+			// The type of chart we want to create
+				type: 'doughnut',
+
+			// The data for our dataset
+			data: {
+			labels: [list[3].name,list[4].name,list[5].name,list[6].name],
+			datasets: [{
+            label: "Software Developers",
+            backgroundColor: ['red','green','blue','green'],
+            borderColor: 'rgb(255, 99, 132)',
+            data: [c[3],c[4],c[5],c[6]],
+        }]
+    },
+
+    // Configuration options go here
+    options: {}
+});
+			var ap="";
+		var aName=document.getElementById("application").selectedIndex;
+		for(var i=7;i<10;i++)
+			if(i-7==aName && usernamee!=list[i].name)
+			c[i]++;
+			m=Math.max(c[7],c[8]);
+			m=Math.max(m,c[9]);
+			if(m==c[7])
+			ap+=list[7].name+" , ";
+			if(m==c[8])
+			ap+=list[8].name+" , ";
+			if(m==c[9])
+			ap+=list[9].name+" , ";
+			document.getElementById("app").innerHTML=ap;
+	
+				var ctx = document.getElementById('apChart').getContext('2d');
+			var chart = new Chart(ctx, {
+			// The type of chart we want to create
+				type: 'doughnut',
+
+			// The data for our dataset
+			data: {
+			labels: [list[7].name,list[8].name,list[9].name],
+			datasets: [{
+            label: "Application Support",
+            backgroundColor: ['red','green','blue'],
+            borderColor: 'rgb(255, 99, 132)',
+            data: [c[7],c[8],c[9]],
+        }]
+    },
+
+    // Configuration options go here
+    options: {}
+});
+//		for(var i=0;i<10;i++)
+	//		document.getElementById(i).innerHTML=list[i].name+":"+c[i];
+			$('#voteForm').fadeOut();
+			$('#result').fadeIn();
+		}
+		function update(){
+			if(!hasVoted.includes(usernamee)){
+			$('#voteForm').fadeIn();
+			
+			//following code will update the select options for IT engineers category
+			$("#engineer").empty();
+			for(var i=0; i<list.length; i++)
+			{
+				if((list[i].cat)==('IT Engineers') && list[i].name!=name)
+				{
+					$("#engineer").append('<option value='+i+'>'+list[i].name+'</option>');
+				}
+			}
+			//alert("come");
+
+			//following code will update the select options for software developers
+			$("#developer").empty();
+			for(var i=0; i<list.length; i++)
+			{
+				if((list[i].cat)==('Software Developer') && list[i].name!=name)
+				{
+					$("#developer").append('<option value='+i+'>'+list[i].name+'</option>');
+				}
+			}
+
+			//following code will update the select options for Application Support
+			$("#application").empty();
+			for(var i=0; i<list.length; i++)
+			{
+				if((list[i].cat)==('Application Support') && list[i].name!=name)
+				{
+					$("#application").append('<option value='+i+'>'+list[i].name+'</option>');
+				}
+			}
+			}
+			else
+			{
+				$("#engineer").empty();
+				$("#developer").empty();
+				$("#application").empty();
+				$('#result').fadeIn();
+			}
+		}
+	//login function to validate the user before casting a vote
+	function login()
+	{
+
+
+		//taking values from login form
+		var uname = document.getElementById("uname").value;
+		var upass = document.getElementById("upass").value;
+
+		var check = 0;
+
+		//loop to check whether a user exist in list or not
+		for(var i=0; i<list.length; i++)
+		{
+			if((list[i].name)==(uname) && (list[i].pass)==(upass))
+			{
+				check=1; //if user exist
+			}
+		}
+		if(check==0)
+		{
+			alert("Username or Password is incorrect!");
+		}
+		else
+		{
+			usernamee=uname;
+			userpasss=upass;
+			//alert(usernamee+"  "+userpasss);
+			
+			update();
+			$('#loginForm').fadeOut();
+
+
+
+
+
+			//alert(usernamee+" "userpasss)
+			
+			//if user found close current page and call open the voting page and pass the parameter
+			//window.close();
+			//window.open("vote.html?name="+uname);
+		}
+	}
+
+	</script>
+</div>
+</body>
